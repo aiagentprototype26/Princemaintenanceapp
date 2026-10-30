@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parkline – Property Maintenance Platform</title>
+<style>
+:root{--bg:#f1f4f8;--card:#fff;--ink:#0f1b33;--mut:#64708a;--navy:#14284b;--acc:#2b5fd9;--line:#e3e8f0;--ok:#16875a;--warn:#c77a0a;--bad:#c93a3a;--me:#14284b;--meink:#fff;--them:#eaeff7;--sh:0 1px 3px rgba(15,27,51,.08),0 4px 14px rgba(15,27,51,.05);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1322;--card:#142038;--ink:#e8edf7;--mut:#93a0ba;--navy:#0e1a30;--acc:#6b95f5;--line:#25324d;--me:#2b5fd9;--them:#1e2d4a;--sh:none}}
+html,body{margin:0}*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+header{background:var(--navy);color:#fff;display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.logo{font-weight:700;letter-spacing:.3px}.logo b{color:#8fb0ff}
+.seg{margin-left:auto;display:flex;background:rgba(255,255,255,.12);border-radius:10px;padding:3px}
+.seg button{border:0;background:none;color:#cdd8f0;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+.seg .on{background:#fff;color:var(--navy);font-weight:600}
+.app{display:flex;flex-direction:column;min-height:calc(100vh - 52px)}
+nav{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:calc(52px + env(safe-area-inset-top,0px));z-index:4}
+nav button{flex:none;border:0;background:none;padding:12px 14px;cursor:pointer;color:var(--mut);font-weight:500;border-bottom:3px solid transparent;white-space:nowrap}
+nav .on{color:var(--acc);border-color:var(--acc)}
+.dot{background:var(--bad);color:#fff;border-radius:9px;font-size:11px;padding:1px 6px;margin-left:5px}
+main{padding:16px;max-width:980px;width:100%;margin:0 auto}
+h2{margin:4px 0 14px;font-size:21px}h3{margin:0 0 8px;font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--sh);cursor:pointer}
+.stat b{font-size:26px;display:block}.stat span{color:var(--mut);font-size:13px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600}
+.btn.sec{background:none;color:var(--acc);border:1px solid var(--acc)}.btn.ok{background:var(--ok)}.btn.bad{background:var(--bad)}
+.btn:disabled{opacity:.5}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.sp{margin-left:auto}
+.item{display:flex;gap:10px;align-items:center;padding:11px 4px;border-bottom:1px solid var(--line);cursor:pointer}.item:last-child{border:0}
+.mut{color:var(--mut);font-size:13px}
+.pill{display:inline-block;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--them);color:var(--acc)}
+.pill.Emergency,.pill.High{background:#fde8e8;color:var(--bad)}.pill.Completed,.pill.Closed,.pill.Scheduled{background:#e2f5ec;color:var(--ok)}.pill.Awaiting{background:#fff1dc;color:var(--warn)}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chat{height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:6px 2px}
+.msg{max-width:82%;padding:9px 12px;border-radius:14px;background:var(--them);align-self:flex-start}
+.msg.me{background:var(--me);color:var(--meink);align-self:flex-end}
+.msg small{display:block;opacity:.7;font-size:11px;margin-top:3px}
+.steps{display:flex;gap:4px;overflow-x:auto;margin-bottom:10px}
+.steps i{flex:1;min-width:46px;height:5px;border-radius:3px;background:var(--line)}.steps i.d{background:var(--acc)}
+.empty{text-align:center;color:var(--mut);padding:30px 10px}
+.login{max-width:420px;margin:8vh auto;padding:16px;text-align:center}
+.login .btn{width:100%;margin-top:10px;padding:14px}
+.hint{background:#fff7e0;color:#5c4300;border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:13px}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:9;max-width:90%;font-size:14px}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:r 1s linear infinite;margin:40px auto}@keyframes r{to{transform:rotate(360deg)}}
+</style></head><body><div id="root"></div><div id="toast" hidden></div>
+<script>
+const STAT=['Submitted','Received','Under Review','Appointment Proposed','Awaiting Tenant Confirmation','Scheduled','In Progress','Completed','Closed'];
+const CATS=['Plumbing','Electrical','Heating and cooling','Appliance repair','Pest control','General repairs','Locks and doors','Other'];
+const TECHS=['Luis Ortega','Priya Nair','Marcus Bell'];
+const ME='Maria Santos';
+const now=()=>new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+const fd=d=>new Date(d+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+const ft=t=>{let[h,m]=t.split(':');h=+h;return(h%12||12)+(m==='00'?'':':'+m)+(h<12?' AM':' PM')};
+const win=a=>fd(a.date)+', '+ft(a.start)+' – '+ft(a.end);
+let seq=1048;
+const O=[
+{id:'WO-1041',tenant:ME,apt:'4C',addr:'215 W 88th St, New York, NY',title:'Bathroom fan not working',cat:'Electrical',desc:'Exhaust fan stopped spinning.',pri:'Low',avail:'Weekdays',status:'Completed',tech:'Priya Nair',appt:{date:'2026-10-22',start:'13:00',end:'15:00'},created:'Oct 18, 9:10 AM',msgs:[{from:'tenant',text:'The bathroom fan stopped working.',t:'Oct 18, 9:10 AM',read:true},{from:'maint',text:'All fixed – the fan motor was replaced. Thanks for your patience!',t:'Oct 22, 2:40 PM',read:true}]},
+{id:'WO-1046',tenant:ME,apt:'4C',addr:'215 W 88th St, New York, NY',title:'Radiator hissing and cold',cat:'Heating and cooling',desc:'Bedroom radiator is cold and makes loud hissing.',pri:'Normal',avail:'Evenings',status:'Awaiting Tenant Confirmation',tech:'Luis Ortega',appt:{date:'2026-11-02',start:'10:00',end:'12:00'},created:'Oct 28, 7:45 PM',msgs:[{from:'tenant',text:'Bedroom radiator is cold and hissing loudly.',t:'Oct 28, 7:45 PM',read:true},{from:'maint',text:'We can come Monday, November 2, between 10 AM and 12 PM. Does that work for you?',t:'Oct 29, 9:05 AM',read:false}]},
+{id:'WO-1044',tenant:'Daniel Cho',apt:'12F',addr:'88 Orchard Ave, Brooklyn, NY',title:'No hot water',cat:'Plumbing',desc:'No hot water since last night.',pri:'Emergency',avail:'Anytime',status:'Received',tech:'Unassigned',appt:null,created:'Oct 30, 6:20 AM',msgs:[{from:'tenant',text:'No hot water since last night, please help.',t:'Oct 30, 6:20 AM',read:false}]},
+{id:'WO-1045',tenant:'Aisha Grant',apt:'2A',addr:'88 Orchard Ave, Brooklyn, NY',title:'Mouse in kitchen',cat:'Pest control',desc:'Saw a mouse behind the stove.',pri:'Normal',avail:'Mornings',status:'In Progress',tech:'Marcus Bell',appt:{date:'2026-10-30',start:'09:00',end:'11:00'},created:'Oct 27, 4:00 PM',msgs:[{from:'maint',text:'Marcus is on site today.',t:'Oct 30, 9:05 AM',read:true}]}];
+let N=[{to:'tenant',text:'WO-1046: Appointment proposed for Mon, Nov 2, 10 AM – 12 PM',id:'WO-1046',t:'Oct 29, 9:05 AM',read:false},{to:'maint',text:'New emergency work order WO-1044 from Daniel Cho',id:'WO-1044',t:'Oct 30, 6:20 AM',read:false}];
+const S={role:null,view:'dash',sel:null,load:false,filter:''};
+const NAV={tenant:[['dash','Dashboard'],['orders','My Work Orders'],['msgs','Messages'],['notifs','Notifications'],['profile','Profile']],maint:[['dash','Dashboard'],['incoming','Incoming Requests'],['orders','Work Orders'],['sched','Schedule'],['msgs','Messages'],['notifs','Notifications'],['profile','Profile']]};
+const $=s=>document.querySelector(s);
+const mine=()=>S.role==='tenant'?O.filter(o=>o.tenant===ME):O;
+const unread=o=>o.msgs.filter(m=>m.from!==S.role&&!m.read).length;
+const toast=t=>{const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>e.hidden=true,3200)};
+function notify(to,text,id){N.unshift({to,text,id,t:now(),read:false});toast((to==='tenant'?'Tenant':'Maintenance')+' notified: '+text)}
+function say(o,from,text){o.msgs.push({from,text,t:now(),read:false})}
+function go(v,id){S.view=v;S.sel=id||null;if(id){const o=O.find(x=>x.id===id);o.msgs.forEach(m=>{if(m.from!==S.role)m.read=true});N.forEach(n=>{if(n.id===id&&n.to===S.role)n.read=true});if(S.role==='maint'&&o.status==='Received'){o.status='Under Review';notify('tenant',id+' is now under review')}}draw();scrollTo(0,0)}
+function sw(r){S.role=r;S.view='dash';S.sel=null;draw()}
+function setStatus(id,st){const o=O.find(x=>x.id===id);o.status=st;const m={'In Progress':'Your technician has started work on '+id,'Completed':id+' has been completed. Thank you!'}[st];if(m){say(o,'maint',m);notify('tenant',m,id)}else notify('tenant',id+' status: '+st,id);draw()}
+function send(id){const i=$('#mi'),v=i.value.trim();if(!v)return;const o=O.find(x=>x.id===id);say(o,S.role,v);notify(S.role==='tenant'?'maint':'tenant',(S.role==='tenant'?o.tenant:'Maintenance')+' sent a message on '+id,id);draw()}
+function submitWO(e){e.preventDefault();const f=new FormData(e.target),id='WO-'+(++seq);const o={id,tenant:ME,apt:f.get('apt'),addr:f.get('addr'),title:f.get('title'),cat:f.get('cat'),desc:f.get('desc'),pri:f.get('pri'),avail:f.get('avail')||'Anytime',status:'Submitted',tech:'Unassigned',appt:null,created:now(),msgs:[{from:'tenant',text:f.get('desc'),t:now(),read:false}],photo:!!f.get('photo').name};O.unshift(o);notify('maint','New '+o.pri.toLowerCase()+' work order '+id+' from '+ME,id);S.load=true;go('detail',id);setTimeout(()=>{S.load=false;if(o.status==='Submitted'){o.status='Received';say(o,'maint','We received your request '+id+'. A team member will review it shortly.');notify('tenant',id+' received by maintenance',id)}draw()},1400)}
+function propose(e,id){e.preventDefault();const f=new FormData(e.target),o=O.find(x=>x.id===id);o.appt={date:f.get('d'),start:f.get('s'),end:f.get('e')};o.tech=f.get('t');o.status='Awaiting Tenant Confirmation';say(o,'maint','We can come '+win(o.appt)+'. Does that work for you?'+(f.get('m')?' '+f.get('m'):''));notify('tenant','Appointment proposed for '+win(o.appt),id);draw()}
+function accept(id){const o=O.find(x=>x.id===id);o.status='Scheduled';say(o,'tenant','Yes, that works.');say(o,'maint','Your appointment is confirmed. Our technician will arrive '+win(o.appt)+'.');notify('maint',o.tenant+' accepted the appointment for '+id,id);notify('tenant',id+' is scheduled',id);draw()}
+function decline(id){const t=prompt('What day/time works better for you?','Could we do Tuesday afternoon instead?');if(!t)return;const o=O.find(x=>x.id===id);o.status='Under Review';say(o,'tenant',t);notify('maint',o.tenant+' requested a different time on '+id,id);draw()}
+function assign(id,v){const o=O.find(x=>x.id===id);o.tech=v;notify('tenant',id+' assigned to '+v,id);draw()}
+function setPri(id,v){O.find(x=>x.id===id).pri=v;draw()}
+const pill=o=>`<span class="pill ${o.status.split(' ')[0]}">${o.status}</span>`;
+function list(a,empty){return a.length?a.map(o=>`<div class="item" onclick="go('detail','${o.id}')"><div style="flex:1;min-width:0"><b>${o.title}</b> <span class="mut">${o.id}</span><div class="mut">${S.role==='maint'?o.tenant+' · Apt '+o.apt+' · ':''}${o.cat} · ${o.appt?win(o.appt):o.created}</div></div>${o.pri==='Emergency'||o.pri==='High'?`<span class="pill ${o.pri}">${o.pri}</span>`:''}${pill(o)}${unread(o)?`<span class="dot">${unread(o)}</span>`:''}</div>`).join(''):`<div class="empty">${empty}</div>`}
+const card=(t,b)=>`<div class="card"><h3>${t}</h3>${b}</div>`;
+const stat=(n,l,v)=>`<div class="stat" onclick="S.filter='${v}';go('${S.role==='tenant'?'orders':'orders'}')"><b>${n}</b><span>${l}</span></div>`;
+function dash(){const a=mine(),c=f=>a.filter(f).length,um=a.reduce((s,o)=>s+unread(o),0);
+if(S.role==='tenant')return `<h2>Welcome back, Maria</h2><div class="hint">Demo: submit a plumbing request, then switch to Maintenance (top right) to continue the workflow.</div><button class="btn" onclick="go('new')">+ Submit a new maintenance request</button><div class="grid" style="margin-top:14px">${stat(c(o=>!['Completed','Closed'].includes(o.status)),'Active work orders','act')}${stat(c(o=>o.status==='Awaiting Tenant Confirmation'),'Awaiting your confirmation','conf')}${stat(c(o=>['Completed','Closed'].includes(o.status)),'Completed','done')}<div class="stat" onclick="go('msgs')"><b>${um}</b><span>Unread messages</span></div></div>${card('Needs your attention',list(a.filter(o=>o.status==='Awaiting Tenant Confirmation'),'Nothing waiting on you.'))}${card('Active work orders',list(a.filter(o=>!['Completed','Closed'].includes(o.status)),'No active work orders.'))}${card('Completed',list(a.filter(o=>['Completed','Closed'].includes(o.status)),'No completed work orders yet.'))}`;
+return `<h2>Maintenance Dashboard</h2><div class="grid">${stat(c(o=>['Submitted','Received'].includes(o.status)),'New incoming','new')}${stat(c(o=>o.pri==='Emergency'&&!['Completed','Closed'].includes(o.status)),'Emergency','em')}${stat(c(o=>o.status==='Scheduled'),'Scheduled','sch')}${stat(c(o=>o.status==='In Progress'),'In progress','ip')}${stat(c(o=>o.status==='Completed'),'Completed','done')}<div class="stat" onclick="go('msgs')"><b>${um}</b><span>Unread tenant messages</span></div></div>${card('Emergency & new requests',list(a.filter(o=>o.pri==='Emergency'||['Submitted','Received'].includes(o.status)),'All caught up.'))}${card('In progress & scheduled',list(a.filter(o=>['Scheduled','In Progress','Appointment Proposed','Awaiting Tenant Confirmation'].includes(o.status)),'Nothing scheduled.'))}`}
+const F={act:o=>!['Completed','Closed'].includes(o.status),conf:o=>o.status==='Awaiting Tenant Confirmation',done:o=>['Completed','Closed'].includes(o.status),new:o=>['Submitted','Received'].includes(o.status),em:o=>o.pri==='Emergency',sch:o=>o.status==='Scheduled',ip:o=>o.status==='In Progress'};
+function orders(inc){let a=mine();if(inc)a=a.filter(F.new);else if(S.filter&&F[S.filter])a=a.filter(F[S.filter]);return `<h2>${inc?'Incoming Requests':S.role==='tenant'?'My Work Orders':'Work Orders'}</h2>${S.filter&&!inc?`<button class="btn sec" onclick="S.filter='';draw()">Clear filter ✕</button><br><br>`:''}${card('',list(a,inc?'No new requests. New tenant submissions will appear here instantly.':'No work orders match.'))}`}
+function sched(){const a=mine().filter(o=>o.appt&&!['Completed','Closed'].includes(o.status)).sort((x,y)=>x.appt.date.localeCompare(y.appt.date));return `<h2>Schedule</h2>${card('',list(a,'No appointments yet. Propose a time from an open work order.'))}`}
+function msgs(){const a=mine().filter(o=>o.msgs.length);return `<h2>Messages</h2>${card('',a.length?a.map(o=>{const m=o.msgs[o.msgs.length-1];return `<div class="item" onclick="go('detail','${o.id}')"><div style="flex:1;min-width:0"><b>${o.title}</b> <span class="mut">${o.id}</span><div class="mut" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.text}</div></div><span class="mut">${m.t}</span>${unread(o)?`<span class="dot">${unread(o)}</span>`:''}</div>`}).join(''):'<div class="empty">No conversations yet.</div>')}`}
+function notifs(){const a=N.filter(n=>n.to===S.role);return `<h2>Notifications</h2><button class="btn sec" onclick="N.forEach(n=>n.to===S.role&&(n.read=true));draw()">Mark all read</button><br><br>${card('',a.length?a.map(n=>`<div class="item" onclick="go('detail','${n.id}')"><div style="flex:1">${n.read?'':'<span class="dot" style="margin:0 6px 0 0">●</span>'}${n.text}<div class="mut">${n.t}</div></div></div>`).join(''):'<div class="empty">You are all caught up.</div>')}`}
+function profile(){return S.role==='tenant'?`<h2>Profile</h2>${card('Maria Santos','<p class="mut">Apartment 4C · 215 W 88th St, New York, NY<br>maria.santos@email.com · (212) 555-0142</p>')}`:`<h2>Profile</h2>${card('Dev Patel – Building Superintendent','<p class="mut">Parkline Property Management · Manhattan & Brooklyn portfolio<br>Technicians: '+TECHS.join(', ')+'</p>')}`}
+function form(){return `<h2>Submit a Work Order</h2><form class="card" onsubmit="submitWO(event)"><label>Work order title</label><input name="title" required value="Kitchen sink leaking underneath"><div class="two"><div><label>Category</label><select name="cat">${CATS.map(c=>`<option ${c==='Plumbing'?'selected':''}>${c}</option>`).join('')}</select></div><div><label>Priority</label><select name="pri"><option>Low</option><option selected>Normal</option><option>High</option><option>Emergency</option></select></div></div><label>Description</label><textarea name="desc" rows="3" required>My kitchen sink has been leaking underneath.</textarea><div class="two"><div><label>Apartment number</label><input name="apt" required value="4C"></div><div><label>Building address</label><input name="addr" required value="215 W 88th St, New York, NY"></div></div><label>Photo of the problem</label><input type="file" name="photo" accept="image/*"><label>Preferred maintenance availability</label><input name="avail" value="Weekdays 10 AM – 4 PM"><br><br><button class="btn" style="width:100%">Submit request</button></form>`}
+function detail(){const o=O.find(x=>x.id===S.sel);if(!o)return '';const T=S.role==='tenant',i=STAT.indexOf(o.status),back=`<button class="btn sec" onclick="go('${T?'orders':'incoming'}')">← Back</button>`;
+if(S.load)return back+`<div class="spin"></div><p class="empty">Submitting ${o.id}…</p>`;
+const steps=`<div class="steps">${STAT.map((s,k)=>`<i class="${k<=i?'d':''}" title="${s}"></i>`).join('')}</div>`;
+const info=card(`${o.title} <span class="mut">${o.id}</span>`,`${steps}<div class="row">${pill(o)}<span class="pill ${o.pri}">${o.pri} priority</span><span class="mut sp">Submitted ${o.created}</span></div><p>${o.desc}</p><p class="mut">${o.cat} · ${T?'':o.tenant+' · '}Apt ${o.apt}, ${o.addr}<br>Technician: ${o.tech}<br>Availability: ${o.avail}${o.photo?'<br>📷 Photo attached':''}<br><b>Appointment: ${o.appt?win(o.appt):'Not yet proposed'}</b></p>`);
+const chat=card('Messages',`<div class="chat" id="chat">${o.msgs.map(m=>`<div class="msg ${m.from===S.role?'me':''}">${m.text}<small>${m.from==='tenant'?o.tenant:'Maintenance'} · ${m.t}${m.from===S.role?(m.read?' · ✓✓ Read':' · ✓ Sent'):''}</small></div>`).join('')}</div><div class="row" style="margin-top:8px"><input id="mi" placeholder="Write a message…" style="flex:1" onkeydown="if(event.key==='Enter')send('${o.id}')"><button class="btn" onclick="send('${o.id}')">Send</button></div>`);
+let act='';
+if(T){if(o.status==='Awaiting Tenant Confirmation')act=card('Appointment proposed',`<p><b>${win(o.appt)}</b> with ${o.tech}</p><div class="row"><button class="btn ok" onclick="accept('${o.id}')">Accept appointment</button><button class="btn sec" onclick="decline('${o.id}')">Request different time</button></div>`);else if(o.status==='Completed')act=card('Completed','<button class="btn sec" onclick="setStatus(\''+o.id+'\',\'Closed\')">Close work order</button>')}
+else{const open=!['Completed','Closed'].includes(o.status);
+act=card('Manage work order',`<div class="two"><div><label>Technician</label><select onchange="assign('${o.id}',this.value)">${['Unassigned',...TECHS].map(t=>`<option ${t===o.tech?'selected':''}>${t}</option>`).join('')}</select></div><div><label>Priority</label><select onchange="setPri('${o.id}',this.value)">${['Low','Normal','High','Emergency'].map(p=>`<option ${p===o.pri?'selected':''}>${p}</option>`).join('')}</select></div></div>${open&&o.status!=='Scheduled'&&o.status!=='In Progress'?`<form onsubmit="propose(event,'${o.id}')"><h3 style="margin-top:14px">${o.appt?'Reschedule':'Propose'} appointment</h3><div class="two"><div><label>Date</label><input type="date" name="d" required value="${o.appt?o.appt.date:'2026-11-02'}"></div><div><label>Technician</label><select name="t">${TECHS.map(t=>`<option ${t===o.tech?'selected':''}>${t}</option>`).join('')}</select></div><div><label>Start</label><input type="time" name="s" value="10:00"></div><div><label>End</label><input type="time" name="e" value="12:00"></div></div><label>Optional message</label><input name="m" placeholder="e.g. Please make sure someone is home"><br><br><button class="btn">Send proposal to tenant</button></form>`:''}<div class="row" style="margin-top:14px">${o.status==='Scheduled'?`<button class="btn" onclick="setStatus('${o.id}','In Progress')">Mark In Progress</button>`:''}${o.status==='Scheduled'?`<button class="btn sec" onclick="O.find(x=>x.id==='${o.id}').status='Under Review';draw()">Reschedule</button>`:''}${o.status==='In Progress'?`<button class="btn ok" onclick="setStatus('${o.id}','Completed')">Mark Completed</button>`:''}</div>${o.status==='Awaiting Tenant Confirmation'?'<p class="mut">Waiting for the tenant to respond…</p>':''}`)}
+return back+'<br><br>'+info+act+chat}
+function draw(){const r=$('#root');if(!S.role){r.innerHTML=`<div class="login"><div class="logo" style="font-size:28px;color:var(--navy)">Park<b style="color:var(--acc)">line</b></div><p class="mut">Tenant ↔ maintenance, in one work order.</p><div class="card"><button class="btn" onclick="sw('tenant')">Login as Tenant (Maria Santos, 4C)</button><button class="btn sec" onclick="sw('maint')">Login as Maintenance (Dev Patel)</button></div><p class="mut">Demo accounts · sample data · no backend</p></div>`;return}
+const nc=N.filter(n=>n.to===S.role&&!n.read).length,mc=mine().reduce((s,o)=>s+unread(o),0);
+const base=S.view==='detail'||S.view==='new'?(S.role==='tenant'?'orders':'orders'):S.view;
+const v={dash,orders:()=>orders(),incoming:()=>orders(true),sched,msgs,notifs,profile,new:form,detail}[S.view]();
+r.innerHTML=`<header><span class="logo">Park<b>line</b></span><div class="seg"><button class="${S.role==='tenant'?'on':''}" onclick="sw('tenant')">Tenant</button><button class="${S.role==='maint'?'on':''}" onclick="sw('maint')">Maintenance</button></div></header><div class="app"><nav>${NAV[S.role].map(([k,l])=>`<button class="${base===k||(S.view==='detail'&&k==='orders')?'on':''}" onclick="S.filter='';go('${k}')">${l}${k==='notifs'&&nc?`<span class="dot">${nc}</span>`:''}${k==='msgs'&&mc?`<span class="dot">${mc}</span>`:''}</button>`).join('')}</nav><main>${v}</main></div>`;
+const c=$('#chat');if(c)c.scrollTop=c.scrollHeight}
+draw();
+</script></body></html>
